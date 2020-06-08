@@ -1,31 +1,48 @@
 <template>
     <div class="master-table-form">
-        <input type="button" value="add" v-on:click="buttonClicked">
+        <input v-if="this.IS_EDIT_MODE" type="button" value="edit" v-on:click="edit">
+        <input v-else type="button" value="add" v-on:click="add">
         <input type="text" placeholder="name" v-model="name">
     </div>
 </template>
 
 
 <script>
-    import axios from 'axios'
+    import {mapGetters, mapMutations} from "vuex";
 
     export default {
         name: "master-table-form",
-        data: function() {
-            return {
-                name: ''
+        computed: {
+            ...mapGetters(["REQUEST", "INDEX", "ID" , "NAME", "IS_EDIT_MODE", "ENTITIES"]),
+            name: {
+                get: function () {
+                    return this.NAME
+                },
+                set: function (name) {
+                    this.SET_NAME(name)
+                }
             }
         },
-        props: {
-        },
         methods: {
-            buttonClicked: function () {
-                axios.post('http://localhost:8080/carservice/masters', {
-                    "name": this.name
+            ...mapMutations(["SET_EDIT_MODE" ,"SET_ID", "SET_NAME"]),
+            add: function () {
+                this.REQUEST.post('/masters', {
+                    "name": this.NAME
                 }).then((result) => {
-                    this.$store.state.entities.push(result.data)
+                    this.ENTITIES.push(result.data)
                 })
-                this.name = ''
+                this.SET_NAME('')
+            },
+            edit: function () {
+                this.REQUEST.post('/masters', {
+                    "id": this.ID,
+                    "name": this.NAME
+                }).then((result) => {
+                    this.ENTITIES.splice(this.INDEX(result.data.id), 1, result.data)
+                })
+                this.SET_ID('')
+                this.SET_NAME('')
+                this.SET_EDIT_MODE(false)
             }
         }
     }

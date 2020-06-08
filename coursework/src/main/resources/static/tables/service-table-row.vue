@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import axios from 'axios'
+    import {mapGetters, mapMutations} from "vuex";
 
     export default {
         name: "service-table-row",
@@ -21,14 +21,22 @@
                 }
             }
         },
+        computed: {
+            ...mapGetters(["REQUEST", "ENTITIES"])
+        },
         methods: {
+            ...mapMutations(["SET_EDIT_MODE" ,"SET_ID", "SET_NAME", "SET_COST_FOREIGN", "SET_COST_OUR"]),
             edit: function () {
-
+                this.SET_ID(this.row_data.id)
+                this.SET_NAME(this.row_data.name)
+                this.SET_COST_OUR(this.row_data.costOur)
+                this.SET_COST_FOREIGN(this.row_data.costForeign)
+                this.SET_EDIT_MODE(true)
             },
             remove: function () {
-                axios.delete('http://localhost:8080/carservice/services/' + this.row_data.id).then(response => {
+                this.REQUEST.delete('/services/' + this.row_data.id).then(response => {
                     if (response.ok) {
-                        this.$store.state.entities.splice(this.$store.state.entities.indexOf(this.row_data), 1)
+                        this.ENTITIES.splice(this.ENTITIES.indexOf(this.row_data), 1)
                     }
                 })
             }

@@ -42,7 +42,7 @@
             },
             isForeign: {
                 get() {
-                    return this.$store.state.car.isForeign
+                    return this.FOREIGN
                 },
                 set(isForeign) {
                     this.SET_FOREIGN(isForeign)
@@ -58,7 +58,7 @@
                     "mark": this.MARK,
                     "foreign": this.FOREIGN
                 }).then((result) => {
-                    this.$store.state.entities.push(result.data)
+                    this.ENTITIES.push(result.data)
                 })
                 this.SET_NUM('')
                 this.SET_MARK('')
@@ -73,7 +73,6 @@
                     "mark": this.MARK,
                     "foreign": this.FOREIGN
                 }).then((result) => {
-                    console.log(this.INDEX(result.data.id))
                     this.ENTITIES.splice(this.INDEX(result.data.id), 1, result.data)
                 })
                 this.SET_EDIT_MODE(false)

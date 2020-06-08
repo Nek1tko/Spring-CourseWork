@@ -37,15 +37,15 @@ const authorization = {
                     }
                 })
                 state.isAuthorized = true
-                commit('UPDATE_LOCAL_STORAGE')
+                commit('UPDATE_SESSION_STORAGE')
             })
 
         }
     },
     mutations: {
-        UPDATE_LOCAL_STORAGE(state) {
-            localStorage.isAuthorized = state.isAuthorized
-            localStorage.jwtToken = state.jwtToken
+        UPDATE_SESSION_STORAGE(state) {
+            sessionStorage.isAuthorized = state.isAuthorized
+            sessionStorage.jwtToken = state.jwtToken
         },
         SET_JWT_TOKEN(state, jwtToken) {
             state.jwtToken = jwtToken

@@ -34,6 +34,7 @@
             ...mapActions(["SEND_AUTH_REQUEST"]),
             ...mapMutations(["SET_PASSWORD", "SET_USERNAME"]),
             signin: function () {
+                localStorage.clear()
                 this.SEND_AUTH_REQUEST()
             }
         }

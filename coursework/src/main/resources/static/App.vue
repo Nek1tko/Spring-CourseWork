@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-      <div v-if="IS_AUTHORIZED">
+      <div v-if="this.IS_AUTHORIZED">
           <navigation-bar />
           <car-table v-if="CARS" :cars_data="ENTITIES" />
           <work-table v-if="WORKS" :works_data="ENTITIES" />
@@ -40,13 +40,7 @@ export default {
     },
 
     methods: {
-        ...mapMutations(["SET_AUTHORIZED", "SET_JWT_TOKEN"]),
-    },
-    mounted() {
-        if (localStorage.isAuthorized) {
-            this.SET_AUTHORIZED(localStorage.isAuthorized)
-            this.SET_JWT_TOKEN(localStorage.jwtToken)
-        }
+        //...mapMutations(["SET_AUTHORIZED", "SET_JWT_TOKEN"]),
     }
 }
 </script>

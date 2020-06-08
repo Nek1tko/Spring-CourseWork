@@ -31,10 +31,20 @@ const store = new Vuex.Store({
                 })
         },
         GET_WORKS({commit}) {
+            console.log("dsadasdsa")
             return authorization.state.apiRequest.get( "/works")
                 .then((response) => {
-                    commit('SET_WORKS', response.data)
+                    if (response.status === 200) {
+                        commit('SET_WORKS', response.data)
+                    }
+                    else if (response.status === 401) {
+                        this.isAuthorized = false
+                    }
+                }).catch(error => {
+                    console.log(error)
                 })
+
+
         },
         GET_SERVICES({commit}) {
             return authorization.state.apiRequest.get( "/services")
@@ -45,7 +55,11 @@ const store = new Vuex.Store({
         GET_MASTERS({commit}) {
             return authorization.state.apiRequest.get( "/masters")
                 .then((response) => {
-                    commit('SET_MASTERS', response.data)
+                    if (response.status === 200) {
+                        commit('SET_MASTERS', response.data)
+                    }
+                    else if (response.status === 401) {
+                    }
                 })
         }
     },

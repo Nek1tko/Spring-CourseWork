@@ -1,4 +1,4 @@
-package ru.spbstu.coursework;
+package ru.spbstu.coursework.exceptions;
 
 public class InvalidIdException extends RuntimeException {
     Integer id;

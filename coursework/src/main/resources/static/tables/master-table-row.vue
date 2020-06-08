@@ -7,7 +7,7 @@
 </template>
 
 <script>
-    import axios from 'axios'
+    import {mapGetters, mapMutations} from "vuex";
 
     export default {
         name: "master-table-row",
@@ -19,14 +19,20 @@
                 }
             }
         },
+        computed: {
+            ...mapGetters(["REQUEST", "ENTITIES"])
+        },
         methods: {
+            ...mapMutations(["SET_EDIT_MODE", "SET_ID", "SET_NAME"]),
             edit: function () {
-
+                this.SET_ID(this.row_data.id)
+                this.SET_NAME(this.row_data.name)
+                this.SET_EDIT_MODE(true)
             },
             remove: function () {
-                axios.delete('http://localhost:8080/carservice/masters/' + this.row_data.id).then(response => {
+                this.REQUEST.delete('/masters/' + this.row_data.id).then(response => {
                     if (response.ok) {
-                        this.$store.state.entities.splice(this.$store.state.entities.indexOf(this.row_data), 1)
+                        this.ENTITIES.splice(this.ENTITIES.indexOf(this.row_data), 1)
                     }
                 })
             }

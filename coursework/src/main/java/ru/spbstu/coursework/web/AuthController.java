@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.spbstu.coursework.enteties.User;
+import ru.spbstu.coursework.exceptions.InvalidUserOrPassword;
 import ru.spbstu.coursework.repositories.UserRepository;
 import ru.spbstu.coursework.security.JwtTokenProvider;
 
@@ -37,7 +38,7 @@ public class AuthController {
         String userName = request.getUserName();
         String password = request.getPassword();
         User user = userRepository.findUserByUserName(userName).
-                orElseThrow(() -> new BadCredentialsException("Invalid username or password"));
+                orElseThrow(() -> new InvalidUserOrPassword("Invalid username or password"));
         Map<Object, Object> model = new HashMap<>();
         if (passwordEncoder.matches(password, user.getPassword())) {
             String token = jwtTokenProvider.createToken(userName, user.getRoles());
@@ -45,7 +46,7 @@ public class AuthController {
             model.put("token", token);
             return ResponseEntity.ok(model);
         } else {
-            throw new BadCredentialsException("Invalid username or password");
+            throw new InvalidUserOrPassword("Invalid username or password");
         }
 
     }
