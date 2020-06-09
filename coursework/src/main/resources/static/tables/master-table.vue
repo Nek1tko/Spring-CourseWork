@@ -39,7 +39,7 @@
     .master-table {
         max-width: 70%;
         margin-left: auto;
-        margin-right: 0;
+        margin-right: 90px;
         margin-top: 0;
     }
     .master-table-header {
@@ -51,7 +51,7 @@
     p {
         padding: 8px 16px;
         flex-basis: 33%;
-        text-align: left;
+        text-align: center;
     }
 
 </style>

@@ -1,21 +1,23 @@
 package ru.spbstu.coursework.enteties;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import ru.spbstu.coursework.enteties.Car;
 import ru.spbstu.coursework.enteties.Master;
 import ru.spbstu.coursework.enteties.Service;
 
 import javax.persistence.*;
+import java.sql.Date;
 
 @Entity
 public class Work {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator="workGenerator")
-    @SequenceGenerator(name="workGenerator", sequenceName="workSeq")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
     @Column(name = "date_work", nullable = false)
-    private String dateWork;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date dateWork;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "car_id")
@@ -31,14 +33,14 @@ public class Work {
 
     protected Work(){}
 
-    public Work(String dateWork, Master master, Service service, Car car) {
+    public Work(Date dateWork, Master master, Service service, Car car) {
         this.dateWork = dateWork;
         this.master = master;
         this.service = service;
         this.car = car;
     }
 
-    public String getDateWork() {
+    public Date getDateWork() {
         return dateWork;
     }
 
@@ -66,7 +68,7 @@ public class Work {
         this.service = service;
     }
 
-    public void setDateWork(String dateWork) {
+    public void setDateWork(Date dateWork) {
         this.dateWork = dateWork;
     }
 

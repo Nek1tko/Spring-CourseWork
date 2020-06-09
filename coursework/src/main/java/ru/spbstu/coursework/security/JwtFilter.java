@@ -1,10 +1,8 @@
 package ru.spbstu.coursework.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -17,10 +15,13 @@ import java.io.IOException;
 
 public class JwtFilter extends GenericFilterBean {
 
+    private JwtAuthEntryPoint jwtAuthEntryPoint;
+
     private JwtTokenProvider jwtTokenProvider;
 
-    public JwtFilter(JwtTokenProvider jwtTokenProvider)  {
+    public JwtFilter(JwtTokenProvider jwtTokenProvider, JwtAuthEntryPoint jwtAuthEntryPoint)  {
         this.jwtTokenProvider = jwtTokenProvider;
+        this.jwtAuthEntryPoint = jwtAuthEntryPoint;
     }
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -35,9 +36,8 @@ public class JwtFilter extends GenericFilterBean {
         }
         catch (AuthenticationException e) {
             SecurityContextHolder.clearContext();
-            new JwtAuthEntryPoint().commence((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse, e);
+            jwtAuthEntryPoint.commence((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse, e);
         }
-
         filterChain.doFilter(servletRequest, servletResponse);
     }
 }

@@ -22,17 +22,6 @@ public class CarServiceController {
     private WorkService workService;
     private ServiceService serviceService;
 
-    @PostMapping("/masters/{id}")
-    public void editMaster(@PathVariable("id") Integer id, String name) {
-        Master master = masterService.findMaster(id);
-
-        if (name != null) {
-            master.setName(name);
-        }
-
-        masterService.addMaster(master);
-    }
-
     @PostMapping(value = "/masters", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Master> addMaster(@RequestBody Master master) {
         return new ResponseEntity<>(masterService.addMaster(master), HttpStatus.OK);
@@ -49,32 +38,8 @@ public class CarServiceController {
     }
 
     @DeleteMapping("/masters/{id}")
-    public ResponseEntity<String> deleteMaster(@PathVariable("id") Integer id) {
+    public void deleteMaster(@PathVariable("id") Integer id) {
         masterService.deleteMaster(id);
-        return new ResponseEntity<>("Master has deleted", HttpStatus.OK);
-    }
-
-    @PutMapping("/works/{id}")
-    public void editWork(@PathVariable("id") Integer id, String dateWork, Integer carId, Integer serviceId, Integer masterId) {
-        Work work = workService.findWork(id);
-
-        if (dateWork != null) {
-            work.setDateWork(dateWork);
-        }
-
-        if (carId != null) {
-            work.setCar(carService.findCar(carId));
-        }
-
-        if (serviceId != null) {
-            work.setService(serviceService.findService(serviceId));
-        }
-
-        if (masterId != null) {
-            work.setMaster(masterService.findMaster(masterId));
-        }
-
-        workService.addWork(work);
     }
 
     @PostMapping(value = "/works", consumes = "application/json", produces = "application/json")
@@ -104,25 +69,6 @@ public class CarServiceController {
         workService.deleteWork(id);
     }
 
-    @PutMapping("/cars/{id}")
-    public void editCar(@PathVariable("id") Integer id, String num, String color, String mark, Boolean isForeign) {
-        Car car = carService.findCar(id);
-
-        if (num != null) {
-            car.setNum(num);
-        }
-        if (color != null) {
-            car.setColor(color);
-        }
-        if (mark != null) {
-            car.setMark(mark);
-        }
-        if (isForeign != null) {
-            car.setForeign(isForeign);
-        }
-        carService.addCar(car);
-    }
-
     @PostMapping(value = "/cars", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Car> addCar(@RequestBody Car car) {
         carService.addCar(car);
@@ -140,9 +86,8 @@ public class CarServiceController {
     }
 
     @DeleteMapping("/cars/{id}")
-    public ResponseEntity<String> deleteCar(@PathVariable("id") Integer id) {
+    public void deleteCar(@PathVariable("id") Integer id) {
         carService.deleteCar(id);
-        return new ResponseEntity<>("Car has deleted", HttpStatus.OK);
     }
 
     @PostMapping("/services/{id}")
@@ -180,9 +125,8 @@ public class CarServiceController {
     }
 
     @DeleteMapping("/services/{id}")
-    public ResponseEntity<String> deleteService(@PathVariable("id") Integer id) {
+    public void deleteService(@PathVariable("id") Integer id) {
         serviceService.deleteService(id);
-        return new ResponseEntity<>("Service has deleted", HttpStatus.OK);
     }
 
     @Autowired

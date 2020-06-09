@@ -1,9 +1,13 @@
 const service = {
     state: {
+        name: '',
         costOur: '',
         costForeign: '',
     },
     getters: {
+        NAME(state) {
+            return  state.name === '' ? null : state.name
+        },
         COST_OUR(state) {
             return state.costOur
         },
@@ -12,6 +16,9 @@ const service = {
         }
     },
     mutations: {
+        SET_NAME(state, name) {
+            state.name = name
+        },
         SET_COST_OUR(state, costOur) {
             state.costOur = costOur
         },

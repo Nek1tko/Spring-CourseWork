@@ -27,29 +27,42 @@ const store = new Vuex.Store({
         GET_CARS({commit}) {
             return authorization.state.apiRequest.get( "/cars")
                 .then((response) => {
-                    commit('SET_CARS', response.data)
+                    if (response.status === 200) {
+                        commit('SET_CARS', response.data)
+                    }
+                }).catch(error => {
+                    if (error.response.status === 401) {
+                        sessionStorage.jwtToken = ''
+                        this.state.authorization.isAuthorized = false
+                    }
                 })
         },
         GET_WORKS({commit}) {
-            console.log("dsadasdsa")
             return authorization.state.apiRequest.get( "/works")
                 .then((response) => {
                     if (response.status === 200) {
                         commit('SET_WORKS', response.data)
                     }
-                    else if (response.status === 401) {
-                        this.isAuthorized = false
-                    }
                 }).catch(error => {
-                    console.log(error)
+                    if (error.response.status === 401) {
+                        window.alert(error.response.data.message)
+                        sessionStorage.jwtToken = ''
+                        this.state.authorization.isAuthorized = false
+                    }
                 })
-
-
         },
         GET_SERVICES({commit}) {
             return authorization.state.apiRequest.get( "/services")
                 .then((response) => {
-                    commit('SET_SERVICES', response.data)
+                    if (response.status === 200) {
+                        commit('SET_SERVICES', response.data)
+                    }
+                }).catch(error => {
+                    if (error.response.status === 401) {
+                        window.alert(error.response.data.message)
+                        sessionStorage.jwtToken = ''
+                        this.state.authorization.isAuthorized = false
+                    }
                 })
         },
         GET_MASTERS({commit}) {
@@ -58,7 +71,11 @@ const store = new Vuex.Store({
                     if (response.status === 200) {
                         commit('SET_MASTERS', response.data)
                     }
-                    else if (response.status === 401) {
+                }).catch(error => {
+                    if (error.response.status === 401) {
+                        window.alert(error.response.data.message)
+                        sessionStorage.jwtToken = ''
+                        this.state.authorization.isAuthorized = false
                     }
                 })
         }

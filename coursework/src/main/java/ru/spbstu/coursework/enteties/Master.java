@@ -7,8 +7,7 @@ import java.util.Set;
 @Entity
 public class Master {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator="masterGenerator")
-    @SequenceGenerator(name="masterGenerator", sequenceName="masterSeq")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 

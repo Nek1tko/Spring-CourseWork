@@ -4,7 +4,9 @@
         <div class="row name"> {{row_data.name}} </div>
         <div class="row costOur"> {{row_data.costOur}} </div>
         <div class="row costForeign"> {{row_data.costForeign}} </div>
-        <input class="row delete" type="button" value="delete" v-on:click="remove">
+        <div class="row">
+            <input class="delete" type="button" value="Delete" v-on:click="remove">
+        </div>
     </div>
 </template>
 
@@ -25,7 +27,7 @@
             ...mapGetters(["REQUEST", "ENTITIES"])
         },
         methods: {
-            ...mapMutations(["SET_EDIT_MODE" ,"SET_ID", "SET_NAME", "SET_COST_FOREIGN", "SET_COST_OUR"]),
+            ...mapMutations(["SET_EDIT_MODE" ,"SET_ID", "SET_NAME", "SET_COST_FOREIGN", "SET_COST_OUR", "SET_AUTHORIZED"]),
             edit: function () {
                 this.SET_ID(this.row_data.id)
                 this.SET_NAME(this.row_data.name)
@@ -35,8 +37,16 @@
             },
             remove: function () {
                 this.REQUEST.delete('/services/' + this.row_data.id).then(response => {
-                    if (response.ok) {
+                    if (response.status === 200) {
                         this.ENTITIES.splice(this.ENTITIES.indexOf(this.row_data), 1)
+                    }
+                }).catch(error => {
+                    if (error.response.status === 403 || error.response.status === 404) {
+                        window.alert(error.response.data.message)
+                    }
+                    else if (error.response.status === 401) {
+                        sessionStorage.jwtToken = ''
+                        this.SET_AUTHORIZED(false)
                     }
                 })
             }
@@ -52,7 +62,12 @@
     .row {
         padding: 8px 8px;
         flex-basis: 20%;
-        text-align: left;
+        text-align: center;
+        align-self: center;
+    }
+    .delete {
+        padding: 8px 8px;
+        max-width: 70px;
         align-self: center;
     }
 </style>

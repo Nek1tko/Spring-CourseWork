@@ -1,11 +1,12 @@
 <template>
   <div id="app">
-      <div v-if="this.IS_AUTHORIZED">
+      <div v-if="this.AUTHORIZED">
           <navigation-bar />
           <car-table v-if="CARS" :cars_data="ENTITIES" />
           <work-table v-if="WORKS" :works_data="ENTITIES" />
           <service-table v-if="SERVICES" :services_data="ENTITIES" />
           <master-table v-if="MASTERS" :masters_data="ENTITIES" />
+          <log-out />
       </div>
       <div v-else>
           <auth-form />
@@ -21,10 +22,12 @@ import WorkTable from "./tables/work-table.vue";
 import ServiceTable from "./tables/service-table.vue";
 import MasterTable from "./tables/master-table.vue";
 import AuthForm from "./auth/auth-form.vue";
+import LogOut from "./components/log-out.vue";
 
 export default {
     name: 'App',
     components: {
+        LogOut,
         AuthForm,
         MasterTable,
         ServiceTable,
@@ -32,26 +35,27 @@ export default {
         NavigationBar,
         carTable
     },
-    data: () => {
-        return{}
-    },
     computed: {
-        ...mapGetters(["ENTITIES", "CARS", "SERVICES", "WORKS", "MASTERS", "IS_AUTHORIZED"])
+        ...mapGetters(["ENTITIES", "CARS", "SERVICES", "WORKS", "MASTERS", "AUTHORIZED"])
     },
-
+    created() {
+        this.SET_JWT_TOKEN(sessionStorage.jwtToken)
+        if(sessionStorage.jwtToken) {
+            this.SET_AUTHORIZED(true)
+        }
+    },
     methods: {
-        //...mapMutations(["SET_AUTHORIZED", "SET_JWT_TOKEN"]),
+        ...mapMutations(["SET_AUTHORIZED", "SET_JWT_TOKEN"]),
     }
 }
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+    font-family: "Source Sans";
+    color: #2c3e50;
+    width: 100%;
+    height: 100vh;
+    display: table;
 }
 </style>

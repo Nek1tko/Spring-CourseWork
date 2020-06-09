@@ -1,7 +1,7 @@
 <template>
     <div class="master-table-form">
-        <input v-if="this.IS_EDIT_MODE" type="button" value="edit" v-on:click="edit">
-        <input v-else type="button" value="add" v-on:click="add">
+        <input class="button" v-if="this.IS_EDIT_MODE" type="button" value="Edit" v-on:click="edit">
+        <input class="button" v-else type="button" value="Add" v-on:click="add">
         <input type="text" placeholder="name" v-model="name">
     </div>
 </template>
@@ -13,7 +13,7 @@
     export default {
         name: "master-table-form",
         computed: {
-            ...mapGetters(["REQUEST", "INDEX", "ID" , "NAME", "IS_EDIT_MODE", "ENTITIES"]),
+            ...mapGetters(["REQUEST", "INDEX", "ID" , "NAME", "IS_EDIT_MODE", "ENTITIES", "SET_AUTHORIZED"]),
             name: {
                 get: function () {
                     return this.NAME
@@ -29,7 +29,17 @@
                 this.REQUEST.post('/masters', {
                     "name": this.NAME
                 }).then((result) => {
-                    this.ENTITIES.push(result.data)
+                    if (result.status === 200) {
+                        this.ENTITIES.push(result.data)
+                    }
+                }).catch(error => {
+                    if (error.response.status === 403) {
+                        window.alert(error.response.data.message)
+                    }
+                    else if (error.response.status === 401) {
+                        sessionStorage.jwtToken = ''
+                        this.SET_AUTHORIZED(false)
+                    }
                 })
                 this.SET_NAME('')
             },
@@ -38,7 +48,17 @@
                     "id": this.ID,
                     "name": this.NAME
                 }).then((result) => {
-                    this.ENTITIES.splice(this.INDEX(result.data.id), 1, result.data)
+                    if (result.status === 200) {
+                        this.ENTITIES.splice(this.INDEX(result.data.id), 1, result.data)
+                    }
+                }).catch(error => {
+                    if (error.response.status === 403) {
+                        window.alert(error.message)
+                    }
+                    else if (error.response.status === 401) {
+                        sessionStorage.jwtToken = ''
+                        this.SET_AUTHORIZED(false)
+                    }
                 })
                 this.SET_ID('')
                 this.SET_NAME('')
@@ -59,5 +79,9 @@
         padding: 8px 16px;
         flex-basis: 25%;
         align-items: center;
+    }
+
+    .button {
+        max-width: 70px;
     }
 </style>

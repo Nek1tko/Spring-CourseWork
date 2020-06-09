@@ -8,11 +8,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
-import ru.spbstu.coursework.exceptions.InvalidToken;
+import ru.spbstu.coursework.exceptions.InvalidTokenException;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.security.InvalidAlgorithmParameterException;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -53,7 +52,7 @@ public class JwtTokenProvider {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
-            throw new InvalidToken("Invalid token or token is expired");
+            throw new InvalidTokenException("Invalid token or token is expired");
         }
     }
 

@@ -5,7 +5,9 @@
         <div class="row carId"> {{row_data.carId}} </div>
         <div class="row masterId"> {{row_data.masterId}} </div>
         <div class="row serviceId"> {{row_data.serviceId}} </div>
-        <input class="row delete" type="button" value="delete" v-on:click="remove">
+        <div class="row">
+            <input class="delete" type="button" value="Delete" v-on:click="remove">
+        </div>
     </div>
 </template>
 
@@ -26,7 +28,7 @@
             ...mapGetters(["REQUEST", "ENTITIES"])
         },
         methods: {
-            ...mapMutations(["SET_DATE_WORK" ,"SET_ID", "SET_CAR_ID", "SET_MASTER_ID", "SET_SERVICE_ID", "SET_EDIT_MODE"]),
+            ...mapMutations(["SET_DATE_WORK" ,"SET_ID", "SET_CAR_ID", "SET_MASTER_ID", "SET_SERVICE_ID", "SET_EDIT_MODE", "SET_AUTHORIZED"]),
             edit: function () {
                 this.SET_ID(this.row_data.id)
                 this.SET_DATE_WORK(this.row_data.dateWork)
@@ -39,6 +41,14 @@
                 this.REQUEST.delete('/works/' + this.row_data.id).then(response => {
                     if (response.status === 200) {
                         this.ENTITIES.splice(this.ENTITIES.indexOf(this.row_data), 1)
+                    }
+                }).catch(error => {
+                    if (error.response.status === 403 || error.response.status === 404) {
+                        window.alert(error.response.data.message)
+                    }
+                    else if (error.response.status === 401) {
+                        sessionStorage.jwtToken = ''
+                        this.SET_AUTHORIZED(false)
                     }
                 })
             }
@@ -54,7 +64,13 @@
     .row {
         padding: 8px 8px;
         flex-basis: 16.6%;
-        text-align: left;
+        text-align: center;
         align-self: center;
     }
+    .delete {
+        padding: 8px 8px;
+        max-width: 70px;
+        align-self: center;
+    }
+
 </style>

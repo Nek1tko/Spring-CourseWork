@@ -1,7 +1,7 @@
 <template>
     <div class="service-table-form">
-        <input v-if="this.IS_EDIT_MODE" type="button" value="edit" v-on:click="edit">
-        <input v-else type="button" value="add" v-on:click="add">
+        <input class="button" v-if="this.IS_EDIT_MODE" type="button" value="Edit" v-on:click="edit">
+        <input class="button" v-else type="button" value="Add" v-on:click="add">
         <input type="text" placeholder="name" v-model="name">
         <input type="number" placeholder="cost_our" v-model="costOur">
         <input type="number" placeholder="cost_foreign" v-model="costForeign">
@@ -43,14 +43,24 @@
             },
         },
         methods: {
-            ...mapMutations(["SET_EDIT_MODE" ,"SET_ID", "SET_NAME", "SET_COST_FOREIGN", "SET_COST_OUR"]),
+            ...mapMutations(["SET_EDIT_MODE" ,"SET_ID", "SET_NAME", "SET_COST_FOREIGN", "SET_COST_OUR", "SET_AUTHORIZED"]),
             add: function () {
                 this.REQUEST.post('/services', {
                     "name": this.NAME,
                     "costOur": this.COST_OUR,
                     "costForeign": this.COST_FOREIGN
                 }).then((result) => {
-                    this.ENTITIES.push(result.data)
+                    if (result.status === 200) {
+                        this.ENTITIES.push(result.data)
+                    }
+                }).catch(error => {
+                    if (error.response.status === 403) {
+                        window.alert(error.response.data.message)
+                    }
+                    else if (error.response.status === 401) {
+                        sessionStorage.jwtToken = ''
+                        this.SET_AUTHORIZED(false)
+                    }
                 })
                 this.SET_NAME('')
                 this.SET_COST_OUR('')
@@ -63,7 +73,17 @@
                     "costOur": this.COST_OUR,
                     "costForeign": this.COST_FOREIGN
                 }).then((result) => {
-                    this.ENTITIES.splice(this.INDEX(result.data.id), 1, result.data)
+                    if (result.status === 200) {
+                        this.ENTITIES.splice(this.INDEX(result.data.id), 1, result.data)
+                    }
+                }).catch(error => {
+                    if (error.response.status === 403) {
+                        window.alert(error.response.data.message)
+                    }
+                    else if (error.response.status === 401) {
+                        sessionStorage.jwtToken = ''
+                        this.SET_AUTHORIZED(false)
+                    }
                 })
                 this.SET_ID('')
                 this.SET_NAME('')
@@ -78,7 +98,7 @@
 <style scoped>
     .service-table-form {
         display: flex;
-        justify-content: space-around;
+        justify-content: left;
         margin-top: 0px;
     }
 
@@ -86,5 +106,9 @@
         padding: 8px 16px;
         flex-basis: 25%;
         align-items: center;
+    }
+
+    .button {
+        max-width: 70px;
     }
 </style>

@@ -41,19 +41,18 @@
     .service-table {
         max-width: 70%;
         margin-left: auto;
-        margin-right: 0;
+        margin-right: 90px;
         margin-top: 0;
     }
     .service-table-header {
         display: flex;
         justify-content: space-around;
         border-bottom: solid 1px #e7e7e7;
-
+        text-align: center;
     }
     p {
         padding: 8px 16px;
         flex-basis: 20%;
-        text-align: left;
     }
 
 </style>

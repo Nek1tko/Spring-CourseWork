@@ -40,21 +40,23 @@
 
 <style scoped>
     .car-table {
+        position: relative;
         max-width: 70%;
         margin-left: auto;
-        margin-right: 0;
+        margin-right: 90px;
         margin-top: 0;
     }
     .car-table-header {
         display: flex;
         justify-content: space-around;
         border-bottom: solid 1px #e7e7e7;
+        text-align: center;
 
     }
     .row {
         padding: 8px 16px;
         flex-basis: 16.6%;
-        text-align: left;
+        text-align: center;
     }
 
 </style>

@@ -7,8 +7,7 @@ import java.util.Set;
 @Entity
 public class Service {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator="serviceGenerator")
-    @SequenceGenerator(name="serviceGenerator", sequenceName="serviceSeq")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 

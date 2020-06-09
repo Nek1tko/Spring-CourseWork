@@ -42,7 +42,13 @@ module.exports = {
                         }
                     }
                 ]
-            }
+            },
+            {
+                test: /\.(gif|png|jpe?g|svg)$/i,
+                use: ["file-loader?name=[name].[ext]&outputPath=images/&publicPath=images/",
+                    "image-webpack-loader"
+                ],
+            },
         ]
     },
     plugins: [

@@ -5,7 +5,9 @@
         <div class="row num"> {{row_data.num}} </div>
         <div class="row color"> {{row_data.color}} </div>
         <input class="row foreign" type="checkbox" v-model="row_data.foreign" disabled="true">
-        <input class="row delete" type="button" value="delete" v-on:click="remove">
+        <div class="row">
+            <input class="delete" type="button" value="Delete" v-on:click="remove">
+        </div>
     </div>
 </template>
 
@@ -25,7 +27,7 @@
             ...mapGetters(["ENTITIES", "REQUEST"])
         },
         methods: {
-            ...mapMutations(["SET_EDIT_MODE", "SET_ID", "SET_MARK", "SET_NUM", "SET_COLOR", "SET_FOREIGN"]),
+            ...mapMutations(["SET_EDIT_MODE", "SET_ID", "SET_MARK", "SET_NUM", "SET_COLOR", "SET_FOREIGN", "SET_AUTHORIZED"]),
             edit: function () {
                 this.SET_ID(this.row_data.id)
                 this.SET_MARK(this.row_data.mark)
@@ -39,6 +41,15 @@
                     if (response.status === 200) {
                         this.ENTITIES.splice(this.$store.state.entities.indexOf(this.row_data), 1)
                     }
+                }).catch(error => {
+                    if (error.response.status === 403 || error.response.status === 404) {
+                        window.alert(error.response.data.message)
+                    }
+                    else if (error.response.status === 401) {
+                        sessionStorage.jwtToken = ''
+                        this.SET_AUTHORIZED(false)
+                    }
+
                 })
             }
         }
@@ -53,7 +64,12 @@
     .row {
         padding: 8px 8px;
         flex-basis: 16.6%;
-        text-align: left;
+        text-align: center;
+        align-self: center;
+    }
+    .delete {
+        padding: 8px 8px;
+        max-width: 70px;
         align-self: center;
     }
 </style>

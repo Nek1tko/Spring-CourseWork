@@ -37,7 +37,7 @@
         list-style-type: none;
         margin: 0;
         padding: 0;
-        width: 25%;
+        width: 20%;
         background-color: #f1f1f1;
         height: 100%;
         position: fixed;
@@ -50,16 +50,16 @@
         padding: 8px 16px;
         text-decoration: none;
         text-align: center;
-        border-bottom: 1px solid #555;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.5);
     }
 
     li:hover {
-        background-color: #555;
-        color: white;
+        background-color: rgba(0, 0, 0, 0.3);
+        color: #f1f1f1;
     }
 
     .active {
-        background-color: #4CAF50;
-        color: white;
+        background-color: #000;
+        color: #f1f1f1;
     }
 </style>

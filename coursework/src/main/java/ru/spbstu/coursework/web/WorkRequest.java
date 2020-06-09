@@ -2,18 +2,20 @@ package ru.spbstu.coursework.web;
 
 import ru.spbstu.coursework.enteties.Work;
 
+import javax.xml.crypto.Data;
 import java.io.Serializable;
+import java.sql.Date;
 
 public class WorkRequest implements Serializable {
     private Integer id;
-    private String dateWork;
+    private Date dateWork;
     private Integer carId;
     private Integer masterId;
     private Integer serviceId;
 
     protected WorkRequest() {};
 
-    public WorkRequest(String dateWork, Integer carId, Integer masterId, Integer serviceId) {
+    public WorkRequest(Date dateWork, Integer carId, Integer masterId, Integer serviceId) {
         this.dateWork = dateWork;
         this.carId = carId;
         this.masterId = masterId;
@@ -28,11 +30,11 @@ public class WorkRequest implements Serializable {
         this.serviceId = work.getService().getId();
     }
 
-    public String getDateWork() {
+    public Date getDateWork() {
         return dateWork;
     }
 
-    public void setDateWork(String dateWork) {
+    public void setDateWork(Date dateWork) {
         this.dateWork = dateWork;
     }
 

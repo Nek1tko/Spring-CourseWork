@@ -7,12 +7,11 @@ import java.util.Set;
 @Entity
 public class Car {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator="carGenerator")
-    @SequenceGenerator(name="carGenerator", sequenceName="carSeq")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "num", nullable = false)
+    @Column(name = "num", nullable = false, unique = true)
     private String num;
 
     @Column(name = "color", nullable = false)
